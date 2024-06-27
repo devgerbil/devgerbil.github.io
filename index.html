@@ -1,4 +1,399 @@
-<!doctype html>
-<head><title>Hello Gerbil</title></head>
-<body><h1>Hello, Gerbil!</h1></body>
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The GerbilCage - MLB Standings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+<style>
+*, *:before, *:after {box-sizing:border-box;}
+html {
+    font-size:16px;
+    font-family:'Open Sans',sans-serif;
+}
+
+body {
+    background:#000;color:#999;
+    line-height:1.25em;
+    padding:0 10px;
+}
+
+header,footer {
+  grid-column: 1 / -1;
+}
+
+.page {
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-gap:1rem;
+    margin:20px auto;
+    max-width:636px;
+    transition: all .5s cubic-bezier(0.5, 0.2, 0.51, 0.8);
+}
+
+/* wide */
+@media screen and (min-width: 1308px) {
+    .page {
+        max-width:1288px;
+        margin:40px auto;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+h1, h2, h3 {color:#fff;line-height: 1.1em;}
+
+section, table {margin-bottom:2rem;}
+caption {font-weight:bold;font-size:1.2em;}
+tbody th {text-align:left;}
+tbody td {text-align:center;}
+footer {font-size:0.7em;color:gray;margin-top:5rem;}
+#AL,#NL {
+  margin-bottom:2rem;background-color:#092c5c;
+  padding:1rem;
+  border-radius:5px;border:3px solid red;
+  min-width:636px;max-width:636px;
+}
+.lane {
+    position:relative;margin-bottom:8px;
+    background-image:linear-gradient(45deg,forestgreen,darkgreen);
+    height:70px;border-radius:35px;
+    width:600px;
+}
+.timeline {
+  background-color:#fff;
+  position:absolute;
+  top:10px;
+  left:12px;
+  /* background-image:linear-gradient(45deg, #061e42,#061e42,white,#bf153e,#bf153e); */
+    height:48px;
+    border-radius:30px;
+    border:20px solid tan;
+    width:calc(100% - 24px);
+    margin:0;
+  }
+.timeline.eliminated {
+  background-image:linear-gradient(45deg, #fff,#fff,#292929,#000);border-color:#595959;
+}
+.team {
+  position:absolute; 
+  left:5px;
+  } 
+.animate .team {           
+    animation-name: winslider;
+    animation-duration: 2s;
+    animation-timing-function: ease-in;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+
+}
+@keyframes winslider {
+  from {left:var(--from-the-left);}
+  to   {left:var(--to-the-right);}
+}
+.name {
+    width:60px;height:60px;
+    border-radius:50%;
+    text-align:center;
+    position:absolute;
+    margin-top:5px;
+    z-index:1;
+}
+.name span {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.glass {
+  background-color: #AAA;
+  background-image: linear-gradient(
+    hsla(0, 0%, 100%, 0.6), hsla(0, 0%, 100%, 0) 50%,
+    hsla(0, 0%, 0%, 0.3) 50%, hsla(0, 0%, 100%, 0.2)
+  );
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  padding: 10px 0;
+  text-shadow:
+    0 0 15px hsla(0, 0%, 100%, 0.0), /* bloom */
+    0 2px 4px hsla(0, 0%, 0%, 1); /* drop shadow */
+  border: none;
+  box-shadow:
+    inset 0 -5px 20px hsla(0, 0%, 0%, 0.4), 
+    /* top light */
+    inset 0 5px 20px hsla(0, 0%, 100%, 0.4), 
+    /* bottom shadow */
+    /* multiple light sources */
+    -8px 8px 5px hsla(0, 0%, 0%, 0.15), /* drop shadow 1 */
+    5px 18px 10px hsla(0, 0%, 0%, 0.2); /* drop shadow 2 */
+  cursor: pointer;
+  transition: transform .1s, box-shadow 0.1s;
+}
+
+/* highlight */
+.glass:before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  top: 7px;
+  height: 30px;
+  padding-top:3px;
+  border-radius: 15px;
+  background: linear-gradient(
+    hsla(0, 0%, 100%, 0.8), hsla(0, 0%, 100%, 0) );
+}
+
+.glass:hover {
+  transform: scale(1.25);
+  box-shadow:
+    inset 0 -5px 20px hsla(0, 0%, 0%, 0.4), /* top light */
+    inset 0 5px 20px hsla(0, 0%, 100%, 0.4), /* bottom shadow */
+    /* multiple light sources yall */
+    -12px 12px 5px hsla(0, 0%, 0%, 0.15), /* drop shadow 1 */
+    10px 25px 10px hsla(0, 0%, 0%, 0.2); /* drop shadow 2 */
+}
+.pct500, .games {position:absolute;width:1px;border-right:2px solid gold;height:100%;}
+.pct500.over {z-index:0;background-color:black;}
+.pct500.under {z-index:0;background-color:#000;}
+.record {font-size:0.8rem;}
+.games {border:none;background-color:#000;}
+.games>span, .pct500>span {position:relative;top:-8px;color:#fff;font-size:0.8em;left:2px;}
+.pct500 {
+  left:35px;
+    animation-name: winslider;
+    animation-duration: 2s;
+    animation-timing-function: ease-in;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+}
+.pct500>span {left:-14px;top:54px;color:gold;}
+.w20 {left:130px;}
+.w40 {left:230px;}
+.w60 {left:330px;}
+.w80 {left:430px;}
+.w100 {left:530px;}
+
+/* team colors */
+.t109 {background-color:#aa182c;color:#E3D4AD;}/* ARI */
+.t109::before {content:"ARI"}
+.t144 {background-color:#ba0c2f;color:#fff;}   /* ATL */
+.t144::before {content:"ATL";}
+.t110 {background-color:#000;color:#DF4601;}   /* BAL */
+.t110::before {content:"BAL";}
+.t110>span {color:#fff;}
+.t111 {background-color:#de0808;color:#fff;}   /* BOS */
+.t111::before {content:"BOS";}
+.t112 {background-color:#123587;color:#fff;}   /* CHC */
+.t112::before {content:"CHC";}
+.t145 {background-color:#000;color:#fff;}      /* CWS */
+.t145::before {content:"CWS";}
+.t113 {background-color:#cc1b24;color:#fff;}   /* CIN */
+.t113::before {content:"CIN";}
+.t114 {background-color:#0a243d;color:#bd3039;}/* CLE */
+.t114::before {content:"CLE";}
+.t114>span {color:#fff;}
+.t115 {background-color:#32016e;color:#fff;}   /* COL */
+.t115::before {content:"COL";}
+.t116 {background-color:#0C2340;color:#fff;}   /* DET */
+.t116::before {content:"DET";}
+.t117 {background-color:#002D62;color:#fff;}/* HOU */
+.t117::before {content:"HOU";-webkit-text-stroke:1px #EB6E1F;}
+.t118 {background-color:#0455f2;color:#fff;}    /* KC */
+.t118::before {content:"KC";}
+.t108 {background-color:#BA0021;color:#fff;}   /* LAA */
+.t108::before {content:"LAA";}
+.t119 {background-color:#004efa;color:#fff;}   /* LAD */
+.t119::before {content:"LAD";}
+.t146 {background-color:#00A3E0;color:#fff;}   /* MIA */
+.t146::before {content:"MIA";}
+.t158 {background-color:#12284B;color:#FFC52F;}/* MIL */
+.t158::before {content:"MIL";}
+.t158>span {color:#fff;}
+.t142 {background-color:#002B5C;color:#D31145;}/* MIN */
+.t142::before {content:"MIN";}
+.t142>span {color:#048ff2;}
+.t121 {background-color:#1d5dbe;color:#FF5910;}/* NYM */
+.t121::before {content:"NYM";}
+.t147 {background-color:#003087;color:#fff;}   /* NYY */
+.t147::before {content:"NYY";}
+.t133 {background-color:darkgreen;color:#EFB21E;}/* OAK */
+.t133::before {content:"OAK";}
+.t143 {background-color:#E81828;color:#fff;}   /* PHI */
+.t143::before {content:"PHI";}
+.t134 {background-color:#000;color:#fdb827;}   /* PIT */
+.t134::before {content:"PIT";}
+.t135 {background-color:#2F241D;color:#FFC425;} /* SD */
+.t135::before {content:"SD";}
+.t136 {background-color:#005C5C;color:#fff;}   /* SEA */
+.t136::before {content:"SEA";}
+.t137 {color:#FD5A1E;background-color:#27251F;} /* SF */
+.t137::before {content:"SF";}
+.t137>span {color:#fff;}
+.t138 {background-color:#C41E3A;color:#fff;}   /* STL */
+.t138::before {content:"STL";}
+.t139 {background-color:#092c5c;color:#fff;}    /* TB */
+.t139::before {content:"TB";}
+.t140 {background-color:#003278;color:#fff;}   /* TEX */
+.t140::before {content:"TEX";}
+.t141 {background-color:#134A8E;color:#fff;}   /* TOR */
+.t141::before {content:"TOR";}
+.t120 {background-color:navy;color:#fff;}   /* WAS */
+.t120::before {content:"WAS";-webkit-text-stroke:1px #AB0003;}
+.t120>span {color:red;}
+
+.stats-bubble {
+  visibility: hidden;
+  padding:0.5rem;
+  opacity: 0.9;
+  border-radius: 5px;
+  z-index: 2;
+  position:absolute;left:53px;top:-50px;
+  width:max-content;
+  box-shadow: 0 0 10px 5px;
+  color:#fff;
+}
+.stats-bubble::before {
+  content: '';
+}
+.stats-bubble h3 { margin:0 0 4px; }
+.team:hover .stats-bubble {
+  visibility: visible;
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="header">
+    <h1>MLB Standings<br><small style="font-size:x-small;color:gold;">devgerbil.github.io</small></h1>
+  </header>
+  <div id="AL" class="league league-A"></div>
+  <div id="NL" class="league league-N"></div>
+  <footer class="footer">
+    <p>UI Design and Concept Copyright &copy; 2024 The DevGerbil - All rights reserved.</p>
+    <p>Data Content Copyright 2024 MLB Advanced Media, L.P.  Use of any data on this page acknowledges agreement to the terms posted at this URL: http://gdx.mlb.com/components/copyright.txt</p>
+  </footer>
+</div>
+
+<script>
+  // Fetch MLB American League standings data from the API
+  fetch('https://statsapi.mlb.com/api/v1/standings?leagueId=103')
+    .then(response => response.json())
+    .then(data => {
+      for (let i = 0; i < data.records.length; i++) {
+        let teamRecords = data.records[i].teamRecords;
+        const ALEast = "American League East";
+        const ALCentral = "American League Central";
+        const ALWest = "American League West";
+        if (i === 0) {MLBdiv = ALEast }
+        else if (i ===1 ) {MLBdiv = ALCentral}
+        else {MLBdiv = ALWest}
+        // Build the Teams HTML 
+        const theElement = document.createElement('section');
+        theElement.classList.add("division");
+        theElement.innerHTML = `
+          <h2>${MLBdiv}</h2>
+          ${teamRecords.map(team => `
+            <div class="lane">
+              <hr class="timeline ${team.hasWildcard ? 'eligible ' : 'eliminated'}"/>
+              <div class="team" style="animation-delay:1.${i}s; --from-the-left:5px; --to-the-right:calc(${team.wins}px * 5);" data-runsAllowed="${team.runsAllowed}" data-runsScored="${team.runsScored}" data-runDiff="${team.runDifferential}" data-hasWildcard="${team.hasWildcard}" data-clinched="${team.clinched}">
+                <div class="stats-bubble t${team.team.id}">
+                  <h3>${team.team.name}</h3>
+                  Division Games Back: ${team.divisionGamesBack}<br>
+                  Runs Scored: ${team.runsScored}<br>
+                  Runs Allowed: ${team.runsAllowed}<br>
+                  Run Differential: ${team.runDifferential}<br>
+                  ${team.hasWildcard ? 'Wildcard Eligible ' : 'Eliminated'} | ${team.wildCardGamesBack} Games Back<br>
+                  ${team.clinched ? 'Clinched' : 'Not Clinched'}<br> 
+                  Home: <br>
+                  Away: <br>
+                  Last 10: <br>
+
+                </div>
+                <div class="name glass t${team.team.id}" >
+                  <br><span class="record" title="Win %: ${(team.wins / (team.wins + team.losses)).toFixed(3)}">${team.wins}-${team.losses}</span>
+                </div>
+                </div>
+                <div class="pct500 under" style="animation-delay:4.${i}s; --from-the-left:35px; --to-the-right:calc(calc(calc(${team.wins}px * 5) + 30px) - calc(${team.wins - team.losses}px * 5));" title="Games Above/Below .500 (${team.wins - team.losses})"><span> .500</span></div>
+                <div class="games w20"><span> 20</span></div>
+                <div class="games w40"><span> 40</span></div>
+                <div class="games w60"><span> 60</span></div>
+                <div class="games w80"><span> 80</span></div>
+                <div class="games w100"><span> 100</span></div>
+                </div>
+          `).join('')}
+        `;   
+        // Append the AL content to the document
+          document.getElementById("AL").appendChild(theElement);
+      } // END for
+    })  // END data
+  .catch(error => console.error('Error fetching data:', error));
+      
+  // Fetch MLB National League standings data from the API
+  fetch('https://statsapi.mlb.com/api/v1/standings?leagueId=104')
+    .then(response => response.json())
+    .then(data => {
+      for (let i = 0; i < data.records.length; i++) {
+        let teamRecords = data.records[i].teamRecords;
+        const NLEast = "National League East";
+        const NLCentral = "National League Central";
+        const NLWest = "National League West";
+        if (i === 0) {MLBdiv = NLEast }
+        else if (i ===1 ) {MLBdiv = NLCentral}
+        else {MLBdiv = NLWest}
+        // Build the Teams HTML
+        const theElement = document.createElement('section');
+        theElement.classList.add("division");
+        theElement.innerHTML = `
+            <h2>${MLBdiv}</h2>
+            ${teamRecords.map(team => `
+              <div class="lane">
+                <hr class="timeline ${team.hasWildcard ? 'eligible ' : 'eliminated'}"/>
+                <div class="team" style="animation-delay:1.${i}s; --from-the-left:5px; --to-the-right:calc(${team.wins}px * 5);">
+                <div class="stats-bubble t${team.team.id}">
+                  <h3>${team.team.name}</h3>
+                  Division Games Back: ${team.divisionGamesBack}<br>
+                  Runs Scored: ${team.runsScored}<br>
+                  Runs Allowed: ${team.runsAllowed}<br>
+                  Run Differential: ${team.runDifferential}<br>
+                  ${team.hasWildcard ? 'Wildcard Eligible ' : 'Eliminated'} | ${team.wildCardGamesBack} Games Back<br>
+                  ${team.clinched ? 'Clinched' : 'Not Clinched'}<br> 
+                  Home: <br>
+                  Away: <br>
+                  Last 10: <br>
+                </div>
+                <div class="name glass t${team.team.id}" title="${team.team.name}"><br><span class="record">${team.wins}-${team.losses}</span></div>
+                </div>
+                <div class="pct500 under" style="animation-delay:4.${i}s; --from-the-left:35px; --to-the-right:calc(calc(calc(${team.wins}px * 5) + 30px) - calc(${team.wins - team.losses}px * 5));" title="Games Above/Below .500 (${team.wins - team.losses})"><span> .500</span></div>
+                <div class="games w20"><span> 20</span></div>
+                <div class="games w40"><span> 40</span></div>
+                <div class="games w60"><span> 60</span></div>
+                <div class="games w80"><span> 80</span></div>
+                <div class="games w100"><span> 100</span></div>
+              </div>
+           `).join('')}
+        `;
+        // Append the NL content to the document
+        document.getElementById("NL").appendChild(theElement);
+      } // END for
+
+      let elements = document.getElementsByClassName("division");
+        function callback(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("animate");
+            }
+          });
+        }
+        
+        let observer = new IntersectionObserver(callback);
+
+        for (let element of elements) {
+          observer.observe(element);
+        }
+
+    })  // END data
+    .catch(error => console.error('Error fetching data:', error));
+</script>
+</body>
 </html>
