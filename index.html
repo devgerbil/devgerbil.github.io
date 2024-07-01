@@ -155,12 +155,13 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
     -12px 12px 5px hsla(0, 0%, 0%, 0.15), /* drop shadow 1 */
     10px 25px 10px hsla(0, 0%, 0%, 0.2); /* drop shadow 2 */
 }
-.pct500, .games {position:absolute;width:1px;border-right:2px solid gold;height:100%;}
+.pct500, .games-runs {position:absolute;width:1px;border-right:2px solid gold;height:100%;}
 .pct500.over {z-index:0;background-color:black;}
 .pct500.under {z-index:0;background-color:#000;}
 .record {font-size:0.8rem;}
-.games {border:none;background-color:#000;}
-.games>span, .pct500>span {position:relative;top:-8px;color:#fff;font-size:0.8em;left:2px;}
+.games-runs {border:none;background-color:#000;}
+.games-runs .games, .games-runs .runs, .pct500>span {position:relative;top:-8px;color:#fff;font-size:0.8em;left:2px;}
+.games-runs .runs {top:1px;color:black;}
 .pct500 {
   left:35px;
     animation-name: winslider;
@@ -262,6 +263,19 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
 .team:hover .stats-bubble {
   visibility: visible;
 }
+.runs-scored, .runs-allowed {
+  position:absolute;
+  left:32px;
+  top:12px;
+  height:8px;
+  background:yellowgreen;
+  border-radius:4px;
+  border:1px solid black
+}
+.runs-allowed {
+  background:indianred;
+  top:31px;
+}
 </style>
 </head>
 <body>
@@ -316,6 +330,8 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
           ${teamRecords.map(team => `
             <div class="lane">
               <hr class="timeline ${team.hasWildcard ? 'eligible ' : 'eliminated'}"/>
+              <hr class="runs-scored" style="width: calc(${team.runsScored}px / 2);" title="Runs Scored: ${team.runsScored}" />
+              <hr class="runs-allowed" style="width: calc(${team.runsAllowed}px / 2);" title="Runs Allowed: ${team.runsAllowed}" />
               <div class="team" style="animation-delay:1.${i}s; --from-the-left:5px; --to-the-right:calc(${team.wins}px * 5);" data-runsAllowed="${team.runsAllowed}" data-runsScored="${team.runsScored}" data-runDiff="${team.runDifferential}" data-hasWildcard="${team.hasWildcard}" data-clinched="${team.clinched}">
                 <div class="stats-bubble t${team.team.id}">
                   <h3>${team.team.name}</h3>
@@ -335,11 +351,11 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
                 </div>
                 </div>
                 <div class="pct500 under" style="animation-delay:4.${i}s; --from-the-left:35px; --to-the-right:calc(calc(calc(${team.wins}px * 5) + 30px) - calc(${team.wins - team.losses}px * 5));" title="Games Above/Below .500 (${team.wins - team.losses})"><span> .500</span></div>
-                <div class="games w20"><span> 20</span></div>
-                <div class="games w40"><span> 40</span></div>
-                <div class="games w60"><span> 60</span></div>
-                <div class="games w80"><span> 80</span></div>
-                <div class="games w100"><span> 100</span></div>
+                <div class="games-runs w20"><span class="games"> 20</span><span class="runs"> 200</span></div>
+                <div class="games-runs w40"><span class="games"> 40</span><span class="runs"> 400</span></div>
+                <div class="games-runs w60"><span class="games"> 60</span><span class="runs"> 600</span></div>
+                <div class="games-runs w80"><span class="games"> 80</span><span class="runs"> 800</span></div>
+                <div class="games-runs w100"><span class="games"> 100</span><span class="runs"> 1000</span></div>
                 </div>
           `).join('')}
         `;   
@@ -368,6 +384,8 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
             ${teamRecords.map(team => `
               <div class="lane">
                 <hr class="timeline ${team.hasWildcard ? 'eligible ' : 'eliminated'}"/>
+                <hr class="runs-scored" style="width: calc(${team.runsScored}px / 2);" title="Runs Scored: ${team.runsScored}" />
+                <hr class="runs-allowed" style="width: calc(${team.runsAllowed}px / 2);" title="Runs Allowed: ${team.runsAllowed}" />
                 <div class="team" style="animation-delay:1.${i}s; --from-the-left:5px; --to-the-right:calc(${team.wins}px * 5);">
                 <div class="stats-bubble t${team.team.id}">
                   <h3>${team.team.name}</h3>
@@ -384,11 +402,11 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
                 <div class="name glass t${team.team.id}" title="${team.team.name}"><br><span class="record">${team.wins}-${team.losses}</span></div>
                 </div>
                 <div class="pct500 under" style="animation-delay:4.${i}s; --from-the-left:35px; --to-the-right:calc(calc(calc(${team.wins}px * 5) + 30px) - calc(${team.wins - team.losses}px * 5));" title="Games Above/Below .500 (${team.wins - team.losses})"><span> .500</span></div>
-                <div class="games w20"><span> 20</span></div>
-                <div class="games w40"><span> 40</span></div>
-                <div class="games w60"><span> 60</span></div>
-                <div class="games w80"><span> 80</span></div>
-                <div class="games w100"><span> 100</span></div>
+                <div class="games-runs w20"><span class="games"> 20</span><span class="runs"> 200</span></div>
+                <div class="games-runs w40"><span class="games"> 40</span><span class="runs"> 400</span></div>
+                <div class="games-runs w60"><span class="games"> 60</span><span class="runs"> 600</span></div>
+                <div class="games-runs w80"><span class="games"> 80</span><span class="runs"> 800</span></div>
+                <div class="games-runs w100"><span class="games"> 100</span><span class="runs"> 1000</span></div>
               </div>
            `).join('')}
         `;
