@@ -30,6 +30,11 @@ header,footer {
     max-width:636px;
     transition: all .5s cubic-bezier(0.5, 0.2, 0.51, 0.8);
 }
+@media screen and (max-width: 1308px) {
+  .stats-bubble {
+
+  }
+}
 
 /* wide */
 @media screen and (min-width: 1308px) {
@@ -156,12 +161,12 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
     10px 25px 10px hsla(0, 0%, 0%, 0.2); /* drop shadow 2 */
 }
 .pct500, .games-runs {position:absolute;width:1px;border-right:2px solid gold;height:100%;}
-.pct500.over {z-index:0;background-color:black;}
+.pct500.over {z-index:0;background-color:#000;}
 .pct500.under {z-index:0;background-color:#000;}
 .record {font-size:0.8rem;}
 .games-runs {border:none;background-color:#000;}
-.games-runs .games, .games-runs .runs, .pct500>span {position:relative;top:-8px;color:#fff;font-size:0.8em;left:2px;}
-.games-runs .runs {top:1px;color:black;}
+.games-runs .games, .games-runs .runs, .pct500>span {position:relative;top:22px;color:#000;font-size:0.8em;left:2px;}
+.games-runs .runs {top:-27px;color:#fff;text-shadow:1px 1px 1px black;}
 .pct500 {
   left:35px;
     animation-name: winslider;
@@ -170,7 +175,7 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
     animation-direction: normal;
     animation-fill-mode: forwards;
 }
-.pct500>span {left:-14px;top:54px;color:gold;}
+.pct500>span {left:-14px;top:33px;color:bisque;text-shadow:1px 1px 1px black;}
 .w20 {left:130px;}
 .w40 {left:230px;}
 .w60 {left:330px;}
@@ -256,6 +261,13 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
   box-shadow: 0 0 10px 5px;
   color:#fff;
 }
+@media screen and (max-width:1308px) {
+  .stats-bubble {
+    position:fixed; top:80px; 
+    left:50%;transform: translate(-50%);
+    font-size:1.25rem; line-height:1.35em;
+  }
+}
 .stats-bubble::before {
   content: '';
 }
@@ -265,16 +277,16 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
 }
 .runs-scored, .runs-allowed {
   position:absolute;
-  left:32px;
-  top:12px;
+  left:35px;
+  top:-7px;
   height:8px;
   background:yellowgreen;
-  border-radius:4px;
+  border-radius:0 4px 4px 0;
   border:1px solid black
 }
 .runs-allowed {
   background:indianred;
-  top:31px;
+  top:52px;
 }
 </style>
 </head>
