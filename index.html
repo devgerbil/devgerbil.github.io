@@ -30,11 +30,6 @@ header,footer {
     max-width:636px;
     transition: all .5s cubic-bezier(0.5, 0.2, 0.51, 0.8);
 }
-@media screen and (max-width: 1308px) {
-  .stats-bubble {
-
-  }
-}
 
 /* wide */
 @media screen and (min-width: 1308px) {
@@ -256,15 +251,14 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
   opacity: 0.9;
   border-radius: 5px;
   z-index: 2;
-  position:absolute;left:53px;top:-50px;
+  position:absolute;
+  left:50%;transform: translate(-50%);
   width:max-content;
   box-shadow: 0 0 10px 5px;
   color:#fff;
 }
 @media screen and (max-width:1308px) {
   .stats-bubble {
-    position:fixed; top:80px; 
-    left:50%;transform: translate(-50%);
     font-size:1.25rem; line-height:1.35em;
   }
 }
