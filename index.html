@@ -361,10 +361,8 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
                   Runs Allowed: ${team.runsAllowed}<br>
                   Run Differential: ${team.runDifferential}<br>
                   ${team.hasWildcard ? 'Wildcard Eligible ' : '<span class="elminated">Eliminated</span>'} | ${team.wildCardGamesBack} Games Back<br>
-                  ${team.clinched ? '<span class="clinch">Clinched</span>' : 'Not Clinched'}<br> 
-                  Home: <br>
-                  Away: <br>
-                  Last 10: <br>
+                  ${team.clinched ? '<span class="clinch"><b>Clinched</b></span><br>' : ''} 
+                  Wildcard Elimation #: ${team.wildCardEliminationNumber}
 
                 </div>
                 <div class="name glass t${team.team.id} ${team.clinched ? 'clinched' : ''}" >
@@ -419,10 +417,8 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
                   Runs Allowed: ${team.runsAllowed}<br>
                   Run Differential: ${team.runDifferential}<br>
                   ${team.hasWildcard ? 'Wildcard Eligible ' : '<span class="elminated">Eliminated</span>'} | ${team.wildCardGamesBack} Games Back<br>
-                  ${team.clinched ? '<span class="clinch">Clinched</span>' : 'Not Clinched'}<br> 
-                  Home: <br>
-                  Away: <br>
-                  Last 10: <br>
+                  ${team.clinched ? '<span class="clinch"><b>Clinched</b></span><br>' : ''} 
+                  Wildcard Elimation #: ${team.wildCardEliminationNumber}
                 </div>
                 <div class="name glass t${team.team.id} ${team.clinched ? 'clinched' : ''}" title="${team.team.name}"><br><span class="record">${team.wins}-${team.losses}</span></div>
                 </div>
