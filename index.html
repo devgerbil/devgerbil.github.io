@@ -74,6 +74,9 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
 .timeline.eliminated, .timeline.E {
   background-image:linear-gradient(45deg, #fff,#fff,#292929,#000);border-color:#595959;
 }
+.timeline.divchamp {
+  background-image:linear-gradient(45deg, #fff,#fff,orange);
+}
 .team {
   position:absolute; 
   left:5px;
@@ -132,7 +135,7 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
 }
 
 .glass.clinched {
-  box-shadow: 0 0 2px 3px gold;
+  box-shadow: 0 0 2px 3px orange;
 }
 
 /* highlight */
@@ -260,7 +263,7 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
   border-radius: 5px;
   z-index: 2;
   position:absolute;
-  left:50%;transform: translate(-50%);
+  left:50%;transform: translate(-90%);
 /*  left:53px;top:-50px; */
   width:max-content;
   box-shadow: 0 0 10px 5px;
@@ -278,8 +281,8 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
 .stats-bubble .clinch {
   color:gold;text-shadow:1px 1px 1px #000;
 }
-.stats-bubble .eliminated {
-  color:red;text-shadow:1px 1px 1px #000;
+.stats-bubble .E {
+  color:gold;text-shadow:2px 2px 2px #000;
 }
 .team:hover .stats-bubble {
   visibility: visible;
@@ -350,36 +353,39 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
           <h2>${MLBdiv}</h2>
           ${teamRecords.map(team => `
             <div class="lane">
-              <hr class="timeline ${team.wildCardEliminationNumber} ${team.hasWildcard ? 'eligible ' : 'eliminated'}"/>
+              <hr class="timeline ${team.wildCardEliminationNumber} ${team.divisionChamp ? 'divchamp' : ''}"/>
               <hr class="runs-scored" style="width: calc(${team.runsScored}px / 2);" title="Runs Scored: ${team.runsScored}" />
               <hr class="runs-allowed" style="width: calc(${team.runsAllowed}px / 2);" title="Runs Allowed: ${team.runsAllowed}" />
               <div class="team" style="animation-delay:1.${i}s; --from-the-left:5px; --to-the-right:calc(${team.wins}px * 5);" data-runsAllowed="${team.runsAllowed}" data-runsScored="${team.runsScored}" data-runDiff="${team.runDifferential}" data-hasWildcard="${team.hasWildcard}" data-clinched="${team.clinched}">
                 <div class="stats-bubble t${team.team.id}">
                   <h3>${team.team.name}</h3>
-                  Division Games Back: ${team.divisionGamesBack}<br>
+                  ${team.divisionChamp 
+                    ? '<span class="clinch"><b>Division Champion</b></span>' 
+                    : ('Division Games Back: '+ team.divisionGamesBack )
+                    } <br>
+                  ${team.clinched 
+                    ? '<span class="clinch"><b>Clinched Wildcard</b></span><br>' 
+                    : ('Wildcard: Games Back: '+ team.wildCardGamesBack + '<br>Elimination #: <b class="'+team.wildCardEliminationNumber+'">' + team.wildCardEliminationNumber + '</b><br>')
+                    } 
                   Runs Scored: ${team.runsScored}<br>
                   Runs Allowed: ${team.runsAllowed}<br>
-                  Run Differential: ${team.runDifferential}<br>
-                  ${team.hasWildcard ? 'Wildcard Eligible ' : '<span class="elminated">Eliminated</span>'} | ${team.wildCardGamesBack} Games Back<br>
-                  ${team.clinched ? '<span class="clinch"><b>Clinched</b></span><br>' : ''} 
-                  Wildcard Elimation #: ${team.wildCardEliminationNumber}
-
+                  Run Differential: ${team.runDifferential}<br>                  
                 </div>
                 <div class="name glass t${team.team.id} ${team.clinched ? 'clinched' : ''}" >
                   <br><span class="record" title="Win %: ${(team.wins / (team.wins + team.losses)).toFixed(3)}">${team.wins}-${team.losses}</span>
                 </div>
-                </div>
-                <div class="pct500 under" style="animation-delay:4.${i}s; --from-the-left:35px; --to-the-right:calc(calc(calc(${team.wins}px * 5) + 30px) - calc(${team.wins - team.losses}px * 5));" title="Games Above/Below .500 (${team.wins - team.losses})"><span> .500</span></div>
-                <div class="games-runs w20"><span class="games"> 20</span><span class="runs"> 200</span></div>
-                <div class="games-runs w30"></div>
-                <div class="games-runs w40"><span class="games"> 40</span><span class="runs"> 400</span></div>
-                <div class="games-runs w50"></div>
-                <div class="games-runs w60"><span class="games"> 60</span><span class="runs"> 600</span></div>
-                <div class="games-runs w70"></div>
-                <div class="games-runs w80"><span class="games"> 80</span><span class="runs"> 800</span></div>
-                <div class="games-runs w90"></div>
-                <div class="games-runs w100"><span class="games"> 100</span><span class="runs"> 1000</span></div>
-                </div>
+              </div>
+              <div class="pct500 under" style="animation-delay:4.${i}s; --from-the-left:35px; --to-the-right:calc(calc(calc(${team.wins}px * 5) + 30px) - calc(${team.wins - team.losses}px * 5));" title="Games Above/Below .500 (${team.wins - team.losses})"><span> .500</span></div>
+              <div class="games-runs w20"><span class="games"> 20</span><span class="runs"> 200</span></div>
+              <div class="games-runs w30"></div>
+              <div class="games-runs w40"><span class="games"> 40</span><span class="runs"> 400</span></div>
+              <div class="games-runs w50"></div>
+              <div class="games-runs w60"><span class="games"> 60</span><span class="runs"> 600</span></div>
+              <div class="games-runs w70"></div>
+              <div class="games-runs w80"><span class="games"> 80</span><span class="runs"> 800</span></div>
+              <div class="games-runs w90"></div>
+              <div class="games-runs w100"><span class="games"> 100</span><span class="runs"> 1000</span></div>
+            </div>
           `).join('')}
         `;   
         // Append the AL content to the document
@@ -403,37 +409,43 @@ footer {font-size:0.7em;color:gray;margin-top:5rem;}
         const theElement = document.createElement('section');
         theElement.classList.add("division");
         theElement.innerHTML = `
-            <h2>${MLBdiv}</h2>
-            ${teamRecords.map(team => `
-              <div class="lane">
-                <hr class="timeline ${team.wildCardEliminationNumber} ${team.hasWildcard ? 'eligible ' : 'eliminated'}"/>
-                <hr class="runs-scored" style="width: calc(${team.runsScored}px / 2);" title="Runs Scored: ${team.runsScored}" />
-                <hr class="runs-allowed" style="width: calc(${team.runsAllowed}px / 2);" title="Runs Allowed: ${team.runsAllowed}" />
-                <div class="team" style="animation-delay:1.${i}s; --from-the-left:5px; --to-the-right:calc(${team.wins}px * 5);">
+          <h2>${MLBdiv}</h2>
+          ${teamRecords.map(team => `
+            <div class="lane">
+              <hr class="timeline ${team.wildCardEliminationNumber} ${team.divisionChamp ? 'divchamp' : ''}"/>
+              <hr class="runs-scored" style="width: calc(${team.runsScored}px / 2);" title="Runs Scored: ${team.runsScored}" />
+              <hr class="runs-allowed" style="width: calc(${team.runsAllowed}px / 2);" title="Runs Allowed: ${team.runsAllowed}" />
+              <div class="team" style="animation-delay:1.${i}s; --from-the-left:5px; --to-the-right:calc(${team.wins}px * 5);" data-runsAllowed="${team.runsAllowed}" data-runsScored="${team.runsScored}" data-runDiff="${team.runDifferential}" data-hasWildcard="${team.hasWildcard}" data-clinched="${team.clinched}">
                 <div class="stats-bubble t${team.team.id}">
                   <h3>${team.team.name}</h3>
-                  Division Games Back: ${team.divisionGamesBack}<br>
+                  ${team.divisionChamp 
+                    ? '<span class="clinch"><b>Division Champion</b></span>' 
+                    : ('Division Games Back: '+ team.divisionGamesBack )
+                    } <br>
+                  ${team.clinched 
+                    ? '<span class="clinch"><b>Clinched Wildcard</b></span><br>' 
+                    : ('Wildcard: Games Back: '+ team.wildCardGamesBack + '<br>Elimination #: <b class="'+team.wildCardEliminationNumber+'">' + team.wildCardEliminationNumber + '</b><br>')
+                    } 
                   Runs Scored: ${team.runsScored}<br>
                   Runs Allowed: ${team.runsAllowed}<br>
-                  Run Differential: ${team.runDifferential}<br>
-                  ${team.hasWildcard ? 'Wildcard Eligible ' : '<span class="elminated">Eliminated</span>'} | ${team.wildCardGamesBack} Games Back<br>
-                  ${team.clinched ? '<span class="clinch"><b>Clinched</b></span><br>' : ''} 
-                  Wildcard Elimation #: ${team.wildCardEliminationNumber}
+                  Run Differential: ${team.runDifferential}<br>                  
                 </div>
-                <div class="name glass t${team.team.id} ${team.clinched ? 'clinched' : ''}" title="${team.team.name}"><br><span class="record">${team.wins}-${team.losses}</span></div>
+                <div class="name glass t${team.team.id} ${team.clinched ? 'clinched' : ''}" >
+                  <br><span class="record" title="Win %: ${(team.wins / (team.wins + team.losses)).toFixed(3)}">${team.wins}-${team.losses}</span>
                 </div>
-                <div class="pct500 under" style="animation-delay:4.${i}s; --from-the-left:35px; --to-the-right:calc(calc(calc(${team.wins}px * 5) + 30px) - calc(${team.wins - team.losses}px * 5));" title="Games Above/Below .500 (${team.wins - team.losses})"><span> .500</span></div>
-                <div class="games-runs w20"><span class="games"> 20</span><span class="runs"> 200</span></div>
-                <div class="games-runs w30"></div>
-                <div class="games-runs w40"><span class="games"> 40</span><span class="runs"> 400</span></div>
-                <div class="games-runs w50"></div>
-                <div class="games-runs w60"><span class="games"> 60</span><span class="runs"> 600</span></div>
-                <div class="games-runs w70"></div>
-                <div class="games-runs w80"><span class="games"> 80</span><span class="runs"> 800</span></div>
-                <div class="games-runs w90"></div>
-                <div class="games-runs w100"><span class="games"> 100</span><span class="runs"> 1000</span></div>
               </div>
-           `).join('')}
+              <div class="pct500 under" style="animation-delay:4.${i}s; --from-the-left:35px; --to-the-right:calc(calc(calc(${team.wins}px * 5) + 30px) - calc(${team.wins - team.losses}px * 5));" title="Games Above/Below .500 (${team.wins - team.losses})"><span> .500</span></div>
+              <div class="games-runs w20"><span class="games"> 20</span><span class="runs"> 200</span></div>
+              <div class="games-runs w30"></div>
+              <div class="games-runs w40"><span class="games"> 40</span><span class="runs"> 400</span></div>
+              <div class="games-runs w50"></div>
+              <div class="games-runs w60"><span class="games"> 60</span><span class="runs"> 600</span></div>
+              <div class="games-runs w70"></div>
+              <div class="games-runs w80"><span class="games"> 80</span><span class="runs"> 800</span></div>
+              <div class="games-runs w90"></div>
+              <div class="games-runs w100"><span class="games"> 100</span><span class="runs"> 1000</span></div>
+            </div>
+          `).join('')}
         `;
         // Append the NL content to the document
         document.getElementById("NL").appendChild(theElement);
